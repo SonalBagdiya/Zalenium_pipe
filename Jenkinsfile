@@ -16,27 +16,17 @@ pipeline {
 			    sh 'sudo chef-client --local-mode --runlist "recipe[zalenium_deployment_pipe]"'
 		}      
             }
-        }
-	 stage('Selenium grid script execution') {
-            parallel {
-                stage('Parallel Test-1') {
-                    steps {
-                        dir ('cookbooks'){
+	}
+        stage('Parallel Test') {
+             steps {
+                    dir ('cookbooks'){
 			    	
-			    	sh 'sudo chef-client --local-mode --runlist "recipe[execute_selenium_script_1_pipe]"'
+			    sh 'sudo chef-client --local-mode --runlist "recipe[execute_selenium_script_1_pipe]"'
 		        }      
                     }
-                }
-                stage('Parallel Test-2') {
-                    steps {
-                        dir ('cookbooks'){
-			     	
-			     	sh 'sudo chef-client --local-mode --runlist "recipe[execute_selenium_script_2_pipe]"'
-			}
-                    }
-                }
+               
             }
-        }
+        
 	    stage('Kubernetes cluster destroy') {
             steps {
 		    dir ('cookbooks'){
